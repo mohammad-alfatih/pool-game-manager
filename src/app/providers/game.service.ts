@@ -152,7 +152,7 @@ export class GameService {
 
   startTurns() {
     const turns = [];
-    const latestTurn = this.game.turns.length - 1;
+    const latestTurn = this.game.turns.length;
     let player;
 
     if (this.game.turns.length === 0) {
