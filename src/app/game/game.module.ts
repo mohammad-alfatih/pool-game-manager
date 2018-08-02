@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { GameRoutingModule } from './game.routing.module';
 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { GameService } from './../providers/game.service';
 
 import { GamePageComponent } from './containers/game-page/game-page.component';
@@ -12,7 +14,10 @@ import { GamePageComponent } from './containers/game-page/game-page.component';
     CommonModule,
     GameRoutingModule
   ],
-  providers: [GameService],
+  providers: [
+    FormBuilder,
+    GameService
+  ],
   declarations: [GamePageComponent]
 })
 export class GameModule { }
