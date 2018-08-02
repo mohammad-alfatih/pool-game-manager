@@ -1,9 +1,94 @@
 <div>
   <h2>Game of Pool</h2>
 
-  <ul *ngFor="let ball of poolBalls">
-    <li>{{ ball.number }} Ball</li>
-  </ul>
+  <form #shotSelection (ngSubmit)="onSubmit(shotSelection)">
+      <h3>Choose a hole</h3>
+      <ol>
+        <li>
+          <input
+            class="hole"
+            type="radio"
+            name="holeSelect"
+            formControlName="hole"
+            value="Top Left"
+            />Top Left: {{ poolTable.topLeft.balls }}
+        </li>
+        <li>
+          <input
+          class="hole"
+          type="radio"
+          name="holeSelect"
+          formControlName="hole"
+          value="Top Right"
+          />Top Right: {{ poolTable.topRight.balls }}
+        </li>
+        <li>
+          <input
+          class="hole"
+          type="radio"
+          name="holeSelect"
+          formControlName="hole"
+          value="Middle Right{"
+        />Middle Right{{ poolTable.middleRight.balls }}
+        </li>
+        <li>
+          <input
+          class="hole"
+          type="radio"
+          name="holeSelect"
+          formControlName="hole"
+          value="Bottom Right"
+          />Bottom Right{{ poolTable.bottomRight.balls }}
+        </li>
+        <li>
+          <input
+          class="hole"
+          type="radio"
+          name="holeSelect"
+          formControlName="hole"
+          value="Bottom Left"
+          />Bottom Left{{ poolTable.bottomLeft.balls }}
+        </li>
+        <li>
+          <input
+          class="hole"
+          type="radio"
+          name="holeSelect"
+          formControlName="hole"
+          value="Middle Left"
+          />Middle Left{{ poolTable.middleLeft.balls }}
+        </li>
+      </ol>
 
-  <button (click)="takeShot(shot)">Shoot the 5 into the top left hole</button>
+      <h3>Choose a ball</h3>
+      <ul>
+        <li *ngFor="let ball of poolBalls">
+          <div class="ball" [style.background-color]="ball.color">
+            <p>{{ ball.number }} Ball</p>
+            <input type="radio" name="ballSelect" />
+          </div>
+        </li>
+      </ul>
+
+      <h3>Did it go in?</h3>
+      <ul>
+        <li>
+          <div class="shotResult">
+            <p>Yes</p>
+            <input type="radio" name="shotResult" />
+          </div>
+        </li>
+        <li>
+          <div class="shotResult">
+            <p>No</p>
+              <input type="radio" name="shotResult" />
+          </div>
+        </li>
+      </ul>
+  </form>
+
+
+
+  <button (click)="onSubmit()" [disabled]="!shotSelection.valid">Take Called Shot</button>
+  <button (click)="testShot()">Shoot the 5 into the top left hole</button>
 </div>

@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from './../../../providers/game.service';
 import { GameModels } from '../../../models/game/game-models';
 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 @Component({
   selector: 'app-game-page',
   templateUrl: './game-page.component.html',
@@ -15,7 +17,12 @@ export class GamePageComponent implements OnInit {
   player2;
   shot;
 
-  constructor(private gameService: GameService) {
+  shotSelection: FormGroup;
+
+  constructor(
+    private gameService: GameService,
+    private formBuilder: FormBuilder
+  ) {
     this.gameService.startGame();
   }
 
@@ -31,16 +38,36 @@ export class GamePageComponent implements OnInit {
     this.poolTable = this.gameService.game.table;
     this.poolBalls = this.gameService.game.balls;
     this.shot = {
-          calledShot: {
-            ball: this.poolBalls[5],
-            hole: this.poolTable.topLeft,
-            shotResult: 1
-          },
-          shotSuccessful: null
-        };
+      calledShot: {
+        ball: this.poolBalls[8],
+        hole: this.poolTable.topLeft,
+        shotResult: 1
+      },
+      shotSuccessful: null
+    };
+
+    this.shotSelection = this.formBuilder.group({
+      hole: ['', Validators.required],
+      ball: ['', Validators.required],
+      shotResult: ['', Validators.required]
+    });
   }
 
-  takeShot(shot: GameModels.Shot) {
-    this.gameService.takeShot(shot);
+  onSubmit(shot: GameModels.Shot) {
+
+    this.shotSelection.reset();
+  }
+
+  testShot() {
+    const shot = {
+      calledShot: {
+        ball: this.poolBalls[5],
+        hole: this.poolTable.topLeft,
+        shotResult: 1
+      },
+      shotSuccessful: null
+    };
+
+  this.gameService.takeShot(shot);
   }
 }
