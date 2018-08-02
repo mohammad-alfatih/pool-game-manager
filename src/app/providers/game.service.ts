@@ -21,8 +21,8 @@ export class GameService {
     this.setTable();
     this.setBalls();
     this.setPlayers();
-    this.startTurns();
-    this.declareWinner();
+    // this.startTurn();
+    // this.declareWinner();
   }
 
   setTable() {
@@ -150,52 +150,84 @@ export class GameService {
   // Set the type of game, whether 8 ball, 9 ball, or trick shots
   // setGameType() {}
 
-  startTurns() {
-    const turns = [];
-    const latestTurn = this.game.turns.length;
+  // startTurn() {
+
+  //   while (!this.game.gameWinner) {
+  //     const activeTurn = this.game.turns.length;
+
+  //     if (!!this.shot) {
+  //       this.game.turns.push(this.createTurn(activeTurn));
+  //       this.game.turns[activeTurn].shot = this.setShotResult(this.shot);
+
+  //       this.shot = null;
+  //     }
+  //   }
+  // }
+
+  startNewTurn(player: GameModels.Player) {
+    const newTurn = this.game.turns.length;
+
+    if (!this.game.turns) {
+      this.game.turns = [];
+    }
+
+    this.game.turns.push(<GameModels.Turn> {
+      turnNumber: newTurn,
+      player: player,
+      shot: null
+    });
+  }
+
+  setActivePlayer(player: GameModels.Player) {
+    console.log(player, 'is up');
+
+    this.startNewTurn(player);
+  }
+
+  checkForWinner(shot: GameModels.Shot) {
+    const activeTurn = this.game.turns.length - 1;
+
+    if (shot.calledShot.ball.number === 8) {
+      if (shot.shotSuccessful) {
+        this.game.gameWinner = this.game.turns[activeTurn].player;
+      }
+    }
+  }
+
+  takeShot(shot: GameModels.Shot) {
+    const activeTurn = this.game.turns.length - 1;
     let player;
 
-    if (this.game.turns.length === 0) {
-      player = this.game.players.find(item => item.name === 'Player1');
-    } else if (this.game.turns[latestTurn].shotSuccessful === true) {
-      player = this.game.turns[latestTurn].player;
+    this.game.turns[activeTurn].shot = this.setShotResult(shot);
+
+    this.checkForWinner(shot);
+
+    if (!!this.game.gameWinner) {
+      console.log('Game Over:', this.game.turns[activeTurn].player.name, 'is the winner!');
+
+      return;
+    }
+
+    if (!!shot.shotSuccessful) {
+      player = this.game.turns[activeTurn].player;
     } else {
-      player = this.game.players.find(item => item.name !== this.game.turns[latestTurn].player.name);
+      player = this.game.players
+      .find(item => item.name !== this.game.turns[activeTurn].player.name);
     }
 
-    if (this.game.gameWinner === null) {
-      this.takeTurn(player);
-    }
+    this.setActivePlayer(player);
   }
 
-  declareWinner() {
-
-  }
-
-  takeTurn(player: GameModels.Player) {
-    const currentTurn = this.game.turns.length;
-    const shot: GameModels.Shot = this.takeShot();
-    let shotSuccess;
-
-    if (shot.shotResult < 2) {
-      shotSuccess = false;
+  setShotResult(shot: GameModels.Shot) {
+    if (shot.calledShot.shotResult < 2) {
+      shot.shotSuccessful = false;
     } else {
-      shotSuccess = true;
+      shot.shotSuccessful = true;
     }
 
-    const turn: GameModels.Turn = {
-      turnNumber: currentTurn,
-      player: player,
-      calledShot: shot,
-      shotSuccessful: shotSuccess
-    };
+    console.log('Shot result:', shot);
 
-    this.game.turns.push(turn);
-  }
-
-  takeShot() {
-    // Create methodology for setting shot properties
-    return new GameModels.Shot();
+    return shot;
   }
 
 }

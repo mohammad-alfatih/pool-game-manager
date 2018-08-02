@@ -26,11 +26,15 @@ export namespace GameModels {
   export class Turn {
     turnNumber: number;
     player: Player;
-    calledShot: Shot;
-    shotSuccessful: boolean;
+    shot: Shot;
   }
 
   export class Shot {
+    calledShot: ShotCall;
+    shotSuccessful: boolean;
+  }
+
+  export class ShotCall {
     ball: Ball;
     hole: Hole;
     shotResult: number;
