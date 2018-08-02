@@ -167,10 +167,6 @@ export class GameService {
   startNewTurn(player: GameModels.Player) {
     const newTurn = this.game.turns.length;
 
-    if (!this.game.turns) {
-      this.game.turns = [];
-    }
-
     this.game.turns.push(<GameModels.Turn> {
       turnNumber: newTurn,
       player: player,
@@ -179,7 +175,10 @@ export class GameService {
   }
 
   setActivePlayer(player: GameModels.Player) {
-    console.log(player, 'is up');
+    if (!this.game.turns) {
+      this.game.turns = [];
+    }
+    console.log(player.name, 'is up, for turn #', this.game.turns.length);
 
     this.startNewTurn(player);
   }
