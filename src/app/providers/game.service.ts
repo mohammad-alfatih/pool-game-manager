@@ -7,11 +7,6 @@ import { GameModels } from '../models/game/game-models';
 })
 export class GameService {
   game: GameModels.Game;
-  // table: GameModels.Table;
-  // balls: GameModels.Ball[];
-  // players: GameModels.Player[];
-  // gameType: number;
-  // sessionType: number;
 
   constructor() { }
 
@@ -21,8 +16,6 @@ export class GameService {
     this.setTable();
     this.setBalls();
     this.setPlayers();
-    // this.startTurn();
-    // this.declareWinner();
   }
 
   setTable() {
@@ -144,36 +137,6 @@ export class GameService {
     this.game.players = players;
   }
 
-  // Set the type of session, whether single device, live session, or practice
-  // setSessionType() {}
-
-  // Set the type of game, whether 8 ball, 9 ball, or trick shots
-  // setGameType() {}
-
-  // startTurn() {
-
-  //   while (!this.game.gameWinner) {
-  //     const activeTurn = this.game.turns.length;
-
-  //     if (!!this.shot) {
-  //       this.game.turns.push(this.createTurn(activeTurn));
-  //       this.game.turns[activeTurn].shot = this.setShotResult(this.shot);
-
-  //       this.shot = null;
-  //     }
-  //   }
-  // }
-
-  startNewTurn(player: GameModels.Player) {
-    const newTurn = this.game.turns.length;
-
-    this.game.turns.push(<GameModels.Turn> {
-      turnNumber: newTurn,
-      player: player,
-      shot: null
-    });
-  }
-
   setActivePlayer(player: GameModels.Player) {
     if (!this.game.turns) {
       this.game.turns = [];
@@ -183,14 +146,14 @@ export class GameService {
     this.startNewTurn(player);
   }
 
-  checkForWinner(shot: GameModels.Shot) {
-    const activeTurn = this.game.turns.length - 1;
+  startNewTurn(player: GameModels.Player) {
+    const newTurn = this.game.turns.length;
 
-    if (shot.calledShot.ball.number === 8) {
-      if (shot.shotSuccessful) {
-        this.game.gameWinner = this.game.turns[activeTurn].player;
-      }
-    }
+    this.game.turns.push(<GameModels.Turn> {
+      turnNumber: newTurn,
+      player: player,
+      shot: null
+    });
   }
 
   takeShot(shot: GameModels.Shot) {
@@ -215,6 +178,16 @@ export class GameService {
     }
 
     this.setActivePlayer(player);
+  }
+
+  checkForWinner(shot: GameModels.Shot) {
+    const activeTurn = this.game.turns.length - 1;
+
+    if (shot.calledShot.ball.number === 8) {
+      if (shot.shotSuccessful) {
+        this.game.gameWinner = this.game.turns[activeTurn].player;
+      }
+    }
   }
 
   setShotResult(shot: GameModels.Shot) {
