@@ -1,9 +1,13 @@
 export namespace GameModels {
   export class Game {
-    players: Player[];
+    id: number;
+    players: {
+      player1: Player;
+      player2: Player;
+    };
     table: Table;
-    turns: Turn[];
-    balls: Ball[];
+    activeTurn: Turn;
+    completedTurns: Turn[];
     sessionType: number;
     gameType: number;
     gameWinner: Player;
@@ -12,21 +16,17 @@ export namespace GameModels {
   export class Player {
     name: string;
     solidColor: boolean;
+    turns: Turn[];
   }
 
   export class Table {
     holes: Hole[];
-    // topLeft: Hole;
-    // topRight: Hole;
-    // middleRight: Hole;
-    // bottomRight: Hole;
-    // bottomLeft: Hole;
-    // middleLeft: Hole;
+    balls: Ball[];
   }
 
   export class Turn {
+    playerName: string;
     turnNumber: number;
-    player: Player;
     shot: Shot;
   }
 
