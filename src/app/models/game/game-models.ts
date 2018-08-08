@@ -15,12 +15,13 @@ export namespace GameModels {
   }
 
   export class Table {
-    topLeft: Hole;
-    topRight: Hole;
-    middleRight: Hole;
-    bottomRight: Hole;
-    bottomLeft: Hole;
-    middleLeft: Hole;
+    holes: Hole[];
+    // topLeft: Hole;
+    // topRight: Hole;
+    // middleRight: Hole;
+    // bottomRight: Hole;
+    // bottomLeft: Hole;
+    // middleLeft: Hole;
   }
 
   export class Turn {
@@ -41,6 +42,7 @@ export namespace GameModels {
   }
 
   export class Hole {
+    name: string;
     balls: Ball[];
   }
 

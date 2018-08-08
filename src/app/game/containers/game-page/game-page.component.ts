@@ -47,14 +47,24 @@ export class GamePageComponent implements OnInit {
     };
 
     this.shotSelection = this.formBuilder.group({
-      hole: ['', Validators.required],
-      ball: ['', Validators.required],
-      shotResult: ['', Validators.required]
+      hole: [null, Validators.required],
+      ball: [null, Validators.required],
+      shotResult: [null, Validators.required]
     });
   }
 
-  onSubmit(shot: GameModels.Shot) {
+  onSubmit() {
+    const shotCall: GameModels.ShotCall = {
+      hole: this.shotSelection.controls['hole'].value,
+      ball: this.shotSelection.controls['ball'].value,
+      shotResult: this.shotSelection.controls['shotResult'].value
+    };
+    const shot: GameModels.Shot = {
+      calledShot: shotCall,
+      shotSuccessful: null
+    };
 
+    this.gameService.takeShot(shot);
     this.shotSelection.reset();
   }
 
@@ -68,6 +78,15 @@ export class GamePageComponent implements OnInit {
       shotSuccessful: null
     };
 
-  this.gameService.takeShot(shot);
+  }
+
+  printSelections() {
+    const selections = {
+      ball: this.shotSelection.controls['ball'].value,
+      hole: this.shotSelection.controls['hole'].value,
+      result: this.shotSelection.controls['shotResult'].value
+    };
+
+    console.log(selections);
   }
 }

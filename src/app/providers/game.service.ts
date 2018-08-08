@@ -20,12 +20,32 @@ export class GameService {
 
   setTable() {
     const table: GameModels.Table = {
-      topLeft: { balls: <GameModels.Ball[]> [] },
-      topRight: { balls: <GameModels.Ball[]> [] },
-      middleRight: { balls: <GameModels.Ball[]> [] },
-      bottomRight: { balls: <GameModels.Ball[]> [] },
-      bottomLeft: { balls: <GameModels.Ball[]> [] },
-      middleLeft: { balls: <GameModels.Ball[]> [] },
+      holes: [
+        {
+          name: 'Top Left',
+          balls: <GameModels.Ball[]> []
+        },
+        {
+          name: 'Top Right',
+          balls: <GameModels.Ball[]> []
+        },
+        {
+          name: 'Middle Right',
+          balls: <GameModels.Ball[]> []
+        },
+        {
+          name: 'Bottom Right',
+          balls: <GameModels.Ball[]> []
+        },
+        {
+          name: 'Bottom Left',
+          balls: <GameModels.Ball[]> []
+        },
+        {
+          name: 'Middle Left',
+          balls: <GameModels.Ball[]> []
+        }
+      ]
     };
 
     this.game.table = table;
