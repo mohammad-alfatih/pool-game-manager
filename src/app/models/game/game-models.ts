@@ -1,22 +1,23 @@
 export namespace GameModels {
   export class Game {
     id: number;
-    players: {
-      player1: Player;
-      player2: Player;
-    };
+    players: Player[];
     table: Table;
     activeTurn: Turn;
     completedTurns: Turn[];
     sessionType: number;
     gameType: number;
-    gameWinner: Player;
+    gameWinner: {
+      playerName: string;
+      turnNumber: number;
+      shotSummary: string;
+    };
   }
 
   export class Player {
     name: string;
     solidColor: boolean;
-    turns: Turn[];
+    associatedTurns: number[];
   }
 
   export class Table {
@@ -28,14 +29,17 @@ export namespace GameModels {
     playerName: string;
     turnNumber: number;
     shot: Shot;
+    shotSummary: string;
   }
 
   export class Shot {
     calledShot: ShotCall;
+    dropIds: string[];
     shotSuccessful: boolean;
   }
 
   export class ShotCall {
+    breakShot: boolean;
     ball: Ball;
     hole: Hole;
     shotResult: number;
@@ -54,7 +58,9 @@ export namespace GameModels {
   }
 
   export class Drop {
+    id: string;
     turnNumber: number;
+    player: string;
     accidental: boolean;
   }
 }

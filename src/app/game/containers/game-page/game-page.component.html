@@ -1,10 +1,10 @@
-<div>
+<div *ngIf="game | async">
   <h2>Game of Pool</h2>
 
   <form [formGroup]='shotSelection' (ngSubmit)="onSubmit()">
     <h3>Choose a ball</h3>
     <ul>
-      <li *ngFor="let ball of poolBalls">
+      <li *ngFor="let ball of game.table.balls">
         <div class="ball" [style.background-color]="ball.color">
           <p>{{ ball.number }} Ball</p>
           <input type="radio" name="ball" formControlName="ball" [value]="ball" />
@@ -14,7 +14,7 @@
 
     <h3>Choose a hole</h3>
       <ol>
-        <li *ngFor="let hole of poolTable.holes">
+        <li *ngFor="let hole of game.table.holes">
           <input
             class="hole"
             type="radio"

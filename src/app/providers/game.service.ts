@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { Observable } from 'rxjs';
+
 import { GameModels } from '../models/game/game-models';
 
 @Injectable({
@@ -10,6 +12,10 @@ export class GameService {
 
   constructor() { }
 
+  initGame(): Observable<GameModels.Table> {
+    return Observable.create(this.setTable());
+  }
+
   startGame() {
     this.game = new GameModels.Game();
 
@@ -19,40 +25,43 @@ export class GameService {
   }
 
   setTable() {
-    const table: GameModels.Table = {
-      holes: [
-        {
-          name: 'Top Left',
-          balls: <GameModels.Ball[]> []
-        },
-        {
-          name: 'Top Right',
-          balls: <GameModels.Ball[]> []
-        },
-        {
-          name: 'Middle Right',
-          balls: <GameModels.Ball[]> []
-        },
-        {
-          name: 'Bottom Right',
-          balls: <GameModels.Ball[]> []
-        },
-        {
-          name: 'Bottom Left',
-          balls: <GameModels.Ball[]> []
-        },
-        {
-          name: 'Middle Left',
-          balls: <GameModels.Ball[]> []
-        }
-      ]
+    return <GameModels.Table> {
+      holes: this.setHoles(),
+      balls: this.setBalls()
     };
+  }
 
-    this.game.table = table;
+  setHoles() {
+    return <GameModels.Hole[]> [
+      {
+        name: 'Top Left',
+        balls: <GameModels.Ball[]> []
+      },
+      {
+        name: 'Top Right',
+        balls: <GameModels.Ball[]> []
+      },
+      {
+        name: 'Middle Right',
+        balls: <GameModels.Ball[]> []
+      },
+      {
+        name: 'Bottom Right',
+        balls: <GameModels.Ball[]> []
+      },
+      {
+        name: 'Bottom Left',
+        balls: <GameModels.Ball[]> []
+      },
+      {
+        name: 'Middle Left',
+        balls: <GameModels.Ball[]> []
+      }
+    ];
   }
 
   setBalls() {
-    const balls: GameModels.Ball[] = [
+    return <GameModels.Ball[]> [
       {
         number: 1,
         color: 'yellow',
@@ -144,68 +153,68 @@ export class GameService {
         drop: null
       }
     ];
-
-    this.game.balls = balls;
   }
 
   setPlayers() {
     const players = [
-      { name: 'Player1', solidColor: true },
-      { name: 'Player2', solidColor: false }
+      { name: 'Player1', solidColor: true, associatedTurns: [] },
+      { name: 'Player2', solidColor: false, associatedTurns: [] }
     ];
 
     this.game.players = players;
   }
 
   setActivePlayer(player: GameModels.Player) {
-    if (!this.game.turns) {
-      this.game.turns = [];
+    if (!this.game.completedTurns) {
+      this.game.completedTurns = [];
     }
-    console.log(player.name, 'is up, for turn #', this.game.turns.length);
+    console.log(player.name, 'is up, for turn #', this.game.completedTurns.length);
 
     this.startNewTurn(player);
   }
 
   startNewTurn(player: GameModels.Player) {
-    const newTurn = this.game.turns.length;
+    const newTurn = this.game.completedTurns.length;
 
-    this.game.turns.push(<GameModels.Turn> {
+    this.game.completedTurns.push(<GameModels.Turn> {
       turnNumber: newTurn,
-      player: player,
-      shot: null
+      playerName: player.name,
+      shot: null,
+      shotSummary: null
     });
   }
 
   takeShot(shot: GameModels.Shot) {
-    const activeTurn = this.game.turns.length - 1;
+    const activeTurn = this.game.completedTurns.length - 1;
     let player;
 
-    this.game.turns[activeTurn].shot = this.setShotResult(shot);
+    this.game.completedTurns[activeTurn].shot = this.setShotResult(shot);
 
     this.checkForWinner(shot);
 
     if (!!this.game.gameWinner) {
-      console.log('Game Over:', this.game.turns[activeTurn].player.name, 'is the winner!');
+      console.log('Game Over:', this.game.completedTurns[activeTurn].playerName, 'is the winner!');
 
       return;
     }
 
     if (!!shot.shotSuccessful) {
-      player = this.game.turns[activeTurn].player;
+      const playerName = this.game.completedTurns[activeTurn].playerName;
+      player = this.game.players[playerName];
     } else {
       player = this.game.players
-      .find(item => item.name !== this.game.turns[activeTurn].player.name);
+      .find(item => item.name !== this.game.completedTurns[activeTurn].playerName);
     }
 
     this.setActivePlayer(player);
   }
 
   checkForWinner(shot: GameModels.Shot) {
-    const activeTurn = this.game.turns.length - 1;
+    const activeTurn = this.game.completedTurns.length - 1;
 
     if (shot.calledShot.ball.number === 8) {
       if (shot.shotSuccessful) {
-        this.game.gameWinner = this.game.turns[activeTurn].player;
+        this.game.gameWinner.playerName = this.game.completedTurns[activeTurn].playerName;
       }
     }
   }

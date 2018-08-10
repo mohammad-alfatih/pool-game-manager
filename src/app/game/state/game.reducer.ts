@@ -9,16 +9,13 @@ import { GameModels } from '../../models/game/game-models';
 export const gameAdapter = createEntityAdapter<GameModels.Game>();
 export interface State extends EntityState<GameModels.Game> {
   id: number;
-  players: {
-    player1: GameModels.Player;
-    player2: GameModels.Player;
-  };
+  players: GameModels.Player[];
   table: GameModels.Table;
   activeTurn: GameModels.Turn;
   completedTurns: GameModels.Turn[];
   sessionType: number;
   gameType: number;
-  gameWinner: GameModels.Player;
+  gameWinner: string;
 }
 
 export const initialGameState: State = gameAdapter.getInitialState({
@@ -38,16 +35,23 @@ export function reducer(
 ): State {
   switch (action.type) {
 
-    case GameActionTypes.CREATE_TABLE:
-      return {
-        ...state,
-        table: action.payload.table
-      };
+    // case GameActionTypes.CREATE_TABLE:
+    //   return {
+    //     ...state,
+    //     table: action.payload.table
+    //   };
 
-    case GameActionTypes.CREATE_PLAYERS:
+    // case GameActionTypes.CREATE_PLAYERS:
+    //   return {
+    //     ...state,
+    //     players: action.payload.players
+    //   };
+
+    case GameActionTypes.INIT_GAME_SUCCESS:
       return {
         ...state,
-        players: action.payload.players
+        id: 0,
+        table: action.payload
       };
 
     case GameActionTypes.ASSIGN_TURN:

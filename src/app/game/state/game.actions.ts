@@ -3,21 +3,21 @@ import { Action } from '@ngrx/store';
 import { GameModels } from '../../models/game/game-models';
 
 export enum GameActionTypes {
-  CREATE_TABLE = '[Game] create table',
-  CREATE_PLAYERS = '[Game] create players',
+  INIT_GAME = '[Game] initiate game',
+  INIT_GAME_SUCCESS = '[Game] initiate game success',
   ASSIGN_TURN = '[Game] assign turn',
   TAKE_SHOT = '[Game] take shot',
   SUBMIT_TURN = '[Game] submit turn'
 }
 
-export class CreateTable {
-  readonly type = GameActionTypes.CREATE_TABLE;
-  constructor(public payload: { table: GameModels.Table }) {}
+export class InitGame {
+  readonly type = GameActionTypes.INIT_GAME;
+  constructor() {}
 }
 
-export class CreatePlayers {
-  readonly type = GameActionTypes.CREATE_PLAYERS;
-  constructor(public payload: { players: { player1: GameModels.Player, player2: GameModels.Player }}) {}
+export class InitGameSuccess {
+  readonly type = GameActionTypes.INIT_GAME_SUCCESS;
+  constructor(public payload: GameModels.Table) {}
 }
 
 export class AssignTurn {
@@ -36,8 +36,8 @@ export class SubmitTurn {
 }
 
 export type GameActions
-  = CreateTable
-  | CreatePlayers
+  = InitGame
+  | InitGameSuccess
   | AssignTurn
   | TakeShot
   | SubmitTurn
